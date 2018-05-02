@@ -7,6 +7,8 @@ import com.modexo.db.ConnectionProvider;
 import com.modexo.model.UserBean; 
 
 public class ClockInOut {  
+	
+	
 
 	public static boolean validate(UserBean bean){  
 		boolean status=false;
@@ -62,20 +64,15 @@ public class ClockInOut {
 
 	}  
 
-	public static void ClockInOutEntry(UserBean bean) {
+	public static void ClockInOutEntryStatus(UserBean bean) {
 		Connection con = null;
 		PreparedStatement psinsertsts = null;
 		PreparedStatement psselectsts = null;
 		PreparedStatement psupdatests = null;
 
 
-		PreparedStatement psselect = null;
-		PreparedStatement psinsert = null;
-		PreparedStatement psupdate = null;
-
-
 		ResultSet rs= null;
-		ResultSet rs1= null;
+
 		try{  
 
 
@@ -86,32 +83,19 @@ public class ClockInOut {
 			rs=psselectsts.executeQuery();
 
 
-			psselect=con.prepareStatement("select * from modexo.employee_records where emp_id=? and emp_clockdate=?");
-			psselect.setString(1, bean.getEmpid());
-			 
-			rs1=psselect.executeQuery();
 
 
-			if (!rs.next() && !rs1.next()) {
+			if (!rs.next()) {
 				psinsertsts=con.prepareStatement("insert into modexo.emp_status (emp_id,emp_status) values (?,?)");
 				psinsertsts.setString(1,bean.getEmpid());
 				psinsertsts.setInt(2, 1);
 				int val =psinsertsts.executeUpdate();
 				System.out.println("Insertion successful with row modification in table emp_status "+ val);
 
-				psinsert=con.prepareStatement("insert into modexo.employee_records (emp_id,clockin, clockout,emp_clockdate) values (?,?,?,?)");
-				psinsert.setString(1,bean.getEmpid());
-				psinsert.setTimestamp(2, java.sql.Timestamp.from(java.time.Instant.now()));
-				psinsert.setTimestamp(3, null);
-				psinsert.setDate(4, java.sql.Date.valueOf(java.time.LocalDate.now()));
-				int val1 =psinsert.executeUpdate();
-				System.out.println("Insertion successful with row modification in table employee_records"+ val1);
-
 			}
 			else {
 				psupdatests=con.prepareStatement("update modexo.emp_status set emp_status=?  where emp_id=?");
-				psupdate=con.prepareStatement("update modexo.employee_records set clockout=?  where emp_id=? and emp_clockdate=?");
-				if (rs.getInt(1)==1 && rs1.getTimestamp(1)==null && rs1.getDate(3)==) {
+				if (rs.getInt(1)==1 ) {
 					psupdatests.setInt(1,0);
 					psupdatests.setInt(2,Integer.parseInt(bean.getEmpid()));
 					psupdatests.executeUpdate();
@@ -156,48 +140,92 @@ public class ClockInOut {
 		}
 	}
 
-
-	private static void CheckClockInOutStatus(int empid) {
+	public static void ClockInOutEntryStatusRecords(UserBean bean) {
 		Connection con = null;
-		PreparedStatement ps = null;
+		PreparedStatement psinsert = null;
+		PreparedStatement psselect = null;
+		//PreparedStatement psupdatein = null;
+		PreparedStatement psupdateout = null;
+
+
 		ResultSet rs= null;
+
 		try{  
+
+
 			con=ConnectionProvider.getConnection();  
-			ps=con.prepareStatement("select * from modexo.emp_status where emp_id=? and emp_status=?");
+
+			psselect=con.prepareStatement("select * from modexo.emp_clockhistory where emp_id=? and emp_clockdate=?");
+			psselect.setString(1,bean.getEmpid());
+			psselect.setDate(2, java.sql.Date.valueOf(java.time.LocalDate.now()));
+			rs=psselect.executeQuery();
 
 
 
 
+			if (!rs.next()) {
+				psinsert=con.prepareStatement("insert into modexo.emp_clockhistory (emp_id,emp_clockin,emp_clockout,emp_clockdate) values (?,?,?,?)");
+				psinsert.setString(1,bean.getEmpid());
+				psinsert.setTimestamp(2,java.sql.Timestamp.valueOf(java.time.LocalDateTime.now()));
+				psinsert.setTimestamp(3,null);
+				psinsert.setDate(4,java.sql.Date.valueOf(java.time.LocalDate.now()));
+				int val =psinsert.executeUpdate();
+				System.out.println("Insertion successful with row modification in table emp_clockhistory "+ val);
 
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		finally {
-			if (con!=null)
-				try {
-					con.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			}
+			else {
+				psupdateout=con.prepareStatement("update modexo.emp_clockhistory set emp_clockout=?  where emp_id=? and emp_clockin=? and emp_clockdate=?");
+				psinsert=con.prepareStatement("insert into modexo.emp_clockhistory (emp_id,emp_clockin,emp_clockout,emp_clockdate) values (?,?,?,?)");
+
+				while (rs.next()) {
+
+					Timestamp clockin = rs.getTimestamp(1); 
+					Integer empid=rs.getInt(2); 
+					Timestamp clockout =rs.getTimestamp(3); 
+					Date clockdate=rs.getDate(4); 
+
+					if (clockin!=null && clockout!=null && clockdate!=null && empid!=null )  //new entry 
+
+					{
+						psinsert.setString(1,bean.getEmpid());
+						psinsert.setTimestamp(2,java.sql.Timestamp.valueOf(java.time.LocalDateTime.now()));
+						psinsert.setTimestamp(3,null);
+						psinsert.setDate(4,java.sql.Date.valueOf(java.time.LocalDate.now()));
+
+					}
+					else if (clockin!=null && clockout==null ) {
+						psupdateout.setTimestamp(1,java.sql.Timestamp.valueOf(java.time.LocalDateTime.now()));
+					}
+
 				}
-			if (ps!=null)
-				try {
-					ps.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			if (rs!=null)
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				
+			}
+			
+		}		
 
 
+			
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			finally {
+				if (con!=null)
+					try {
+						con.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				if (psinsert!=null)
+					try {
+						psinsert.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+
+
+			}
 		}
-	}
-}  
+	}  

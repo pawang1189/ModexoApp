@@ -14,17 +14,36 @@
 </head>
 
 <body>
+	<%@page import="com.modexo.controller.LoginOut"%>
+	<%@page import="com.modexo.model.UserBean"%>
+	<jsp:useBean id="obj" class="com.modexo.model.UserBean" />
+
+	<jsp:setProperty property="*" name="obj" />
+
 	<hr />
-	<body background="images\background1.jpg">
+<body background="images\background1.jpg">
 	<h3>Log In/Log Out</h3>
-	
+
 	<br />
 	<form action="loginlogoutprocess.jsp" method="post">
-		Employee ID:<input type="text" name="empid" /><br />
+
+		Employee ID:<input type="text" name="empid"
+			value="<%Cookie[] cookies = request.getCookies();
+			if (cookies != null) {
+				for (Cookie c : cookies) {
+				//	if (c.getName() != null && c.getValue() != null) {
+				//		if ((Integer.parseInt(c.getName()) == Integer.parseInt(obj.getEmpid()))) {
+							out.print(c.getValue());
+
+							break;
+				//		}
+				//	}
+				}
+			}%>" /><br />
 		<br /> Password:<input type="password" name="emppassword" /><br />
-		<br /> Employee:<input type="radio" name="role" value="E"/><br />
-		<br /> Admin:<input type="radio" name="role" value="A"/><br />
-		<br /> <input type="submit" value="OK" />
+		<br /> Employee:<input type="radio" name="role" value="E" /><br />
+		<br /> Admin:<input type="radio" name="role" value="A" /><br /> <br />
+		<input type="submit" value="OK" />
 	</form>
 
 </body>

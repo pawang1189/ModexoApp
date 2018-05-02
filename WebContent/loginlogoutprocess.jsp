@@ -9,23 +9,38 @@
 <body>
 	<%@page import="com.modexo.controller.LoginOut"%>
 	<%@page import="com.modexo.model.UserBean"%>
-	<jsp:useBean id="obj" class="com.modexo.model.UserBean"/>
+	<jsp:useBean id="obj" class="com.modexo.model.UserBean" />
 
 	<jsp:setProperty property="*" name="obj" />
 
 	<%
 		boolean status = LoginOut.validate(obj);
 		if (status) {
+			
+			Cookie empidCookie = new Cookie(obj.getEmpid(), obj.getEmpid());
+			empidCookie.setMaxAge(60 * 60 * 24 * 365); // 1 year
+			response.addCookie(empidCookie);
+
 			session.setAttribute("session", "TRUE");
 			session.setAttribute("empid", Integer.parseInt(obj.getEmpid()));
-			response.sendRedirect("EmployeeHomePage.jsp");
+			
+			if (obj.getRole().equals("E")){
+				response.sendRedirect("EmployeeHomePage.jsp");	
+			}
+			else{
+				response.sendRedirect("EmployeeHomePageAdmin.jsp");
+			}
+			
 		} else {
 			out.print("Sorry, Employee ID or Password is incorrect");
 		}
 	%>
-	
-	<br> <br/> 
-	<a href="index.jsp">Back</a><br/><br/>
+
+	<br>
+	<br />
+	<a href="index.jsp">Back</a>
+	<br />
+	<br />
 </body>
 </html>
 

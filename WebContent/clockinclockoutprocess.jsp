@@ -8,6 +8,8 @@
 <title>Insert title here</title>
 </head>
 <body>
+
+
 	<%@page import="com.modexo.controller.ClockInOut"%>
 	<%@page import="com.modexo.model.UserBean"%>
 	<jsp:useBean id="obj" class="com.modexo.model.UserBean" />
@@ -19,13 +21,19 @@
 		if (status) {
 			session.setAttribute("session", "TRUE");
 			session.setAttribute("empid", Integer.parseInt(obj.getEmpid())); //getAttribute in EmployeeHomePage.jsp
-			ClockInOut.ClockInOutEntry(obj);
+			ClockInOut.ClockInOutEntryStatus(obj);
+			ClockInOut.ClockInOutEntryStatusRecords(obj);
+			
+			
 			out.println("<meta http-equiv='refresh' content='3;URL=clockinclockout.jsp'>"); //redirects after 3 seconds
 			out.println("<p style='color:green;'>Your Shift starts now..Have a great time</p>");
 			//Meta refresh is a method of instructing a web browser to automatically refresh the current web page or frame after a given time interval, 
 			//using an HTML meta element with the http-equiv parameter set to " refresh " and a content parameter giving the time interval in seconds.
 			
+			
 	%>
+	
+	
 	<%
 		//response.sendRedirect("clockinclockout.jsp");
 
