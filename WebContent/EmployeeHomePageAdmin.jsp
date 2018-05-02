@@ -80,11 +80,11 @@ if (cookies != null) {
 %>
 
 
-	<form action="SearchCustomerProcess.jsp" method="post">
+	<form action="SearchEmployeeProcess.jsp" method="post">
 		<fieldset>
 			<legend>Search Employee:</legend>
 			<br /> Employee Name:<input type="text" name="empname" value="<%=empname%>"><br />
-			<br /> <button type="button">Search</button> <br />
+			<br /> <button type="submit">Search</button> <br />
 		</fieldset>
 	</form>
 

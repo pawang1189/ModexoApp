@@ -179,22 +179,26 @@ public class ClockInOut {
 
 				while (rs.next()) {
 
-					Timestamp clockin = rs.getTimestamp(1); 
-					Integer empid=rs.getInt(2); 
-					Timestamp clockout =rs.getTimestamp(3); 
-					Date clockdate=rs.getDate(4); 
+					Timestamp emp_clockin = rs.getTimestamp(1); 
+					Integer emp_id=rs.getInt(2); 
+					Timestamp emp_clockout =rs.getTimestamp(3); 
+					Date emp_clockdate=rs.getDate(4); 
 
-					if (clockin!=null && clockout!=null && clockdate!=null && empid!=null )  //new entry 
+					if (emp_clockin!=null && emp_clockout!=null && emp_clockdate!=null && emp_id!=null )  //new entry 
 
 					{
 						psinsert.setString(1,bean.getEmpid());
 						psinsert.setTimestamp(2,java.sql.Timestamp.valueOf(java.time.LocalDateTime.now()));
 						psinsert.setTimestamp(3,null);
 						psinsert.setDate(4,java.sql.Date.valueOf(java.time.LocalDate.now()));
+						int val =psinsert.executeUpdate();
+						System.out.println("Insertion successful with row modification in table emp_clockhistory "+ val);
 
 					}
-					else if (clockin!=null && clockout==null ) {
+					else if (emp_clockin!=null && emp_clockout==null ) {
 						psupdateout.setTimestamp(1,java.sql.Timestamp.valueOf(java.time.LocalDateTime.now()));
+						int val =psupdateout.executeUpdate();
+						System.out.println("updation successful with row modification in table emp_clockhistory "+ val);
 					}
 
 				}

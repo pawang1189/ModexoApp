@@ -25,7 +25,7 @@
 	<h3>Log In/Log Out</h3>
 
 	<br />
-	<form action="loginlogoutprocess.jsp" method="post">
+	<form action="LoginLogoutServlet" method="post">
 
 		Employee ID:<input type="text" name="empid"
 			value="<%Cookie[] cookies = request.getCookies();
