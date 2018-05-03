@@ -1,14 +1,17 @@
 package com.modexo.model;
 
-import java.util.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class EmployeeDetailsBean {
-	
+
 	public EmployeeDetailsBean(){
-		
+
 	}
-	
-	private String empname, empcontact, empemail,emprole;
+
+	private String empname, empcontact, empemail,emprole,emppassword;
 	private double emprate;
 	private int empid;
 	private Date empdoj;
@@ -23,7 +26,7 @@ public class EmployeeDetailsBean {
 
 	public String getEmpname() {
 		return empname;
-		
+
 	}
 
 	public void setEmpname(String empname) {
@@ -34,8 +37,10 @@ public class EmployeeDetailsBean {
 		return empdoj;
 	}
 
-	public void setEmpdoj(Date empdoj) {
-		this.empdoj = empdoj;
+	public void setEmpdoj(String empdoj) throws ParseException {
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd"); 
+		//System.out.println("dsfdnfjhdshjdsfjdsjsgdjf "+empdoj);
+		this.empdoj = df.parse(empdoj);
 	}
 
 	public String getEmpcontact() {
@@ -69,7 +74,15 @@ public class EmployeeDetailsBean {
 	public void setEmprole(String emprole) {
 		this.emprole = emprole;
 	}
-	
-	
+
+	public String getEmppassword() {
+		return emppassword;
+	}
+
+	public void setEmppassword(String emppassword) {
+		this.emppassword = emppassword;
+	}
+
+
 
 }

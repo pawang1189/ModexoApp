@@ -41,7 +41,7 @@ public class SearchEmployee {
 				bean.setEmpemail(empemail);
 				
 				Date empdoj = rs.getDate("emp_doj");
-				bean.setEmpdoj(empdoj);
+				bean.setEmpdoj(empdoj.toString());
 				
 				double emprate= rs.getDouble("emp_rate");
 				bean.setEmprate(emprate);

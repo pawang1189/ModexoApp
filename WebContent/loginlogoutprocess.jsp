@@ -14,7 +14,7 @@
 	<jsp:setProperty property="*" name="obj" />
 
 	<%
-		boolean status = LoginOut.validate(obj);
+		/* boolean status = LoginOut.validate(obj);
 		if (status) {
 			
 			Cookie empidCookie = new Cookie(obj.getEmpid(), obj.getEmpid());
@@ -33,7 +33,7 @@
 			
 		} else {
 			out.print("Sorry, Employee ID or Password is incorrect");
-		}
+		} */
 	%>
 
 	<br>

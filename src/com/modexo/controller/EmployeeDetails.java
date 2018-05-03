@@ -38,7 +38,7 @@ public class EmployeeDetails {
 				ebean.setEmpcontact(empcontact);
 				
 				Date empdoj = rs.getDate("emp_doj");
-				ebean.setEmpdoj(empdoj);
+				ebean.setEmpdoj(empdoj.toString());
 				
 				double emprate = rs.getDouble("emp_rate");
 				ebean.setEmprate(emprate);

@@ -4,7 +4,7 @@ public class UserBean {
 	
 	private String emppassword;
 	private String empid;
-	private String role="E";
+	private String role="0";
 
 	public UserBean() {
 	}

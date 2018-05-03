@@ -10,6 +10,7 @@
 </head>
 <body>
 <%@page import="com.modexo.model.EmployeeDetailsBean"  %>
+<%@page import="java.sql.Date"%>
 <%
 EmployeeDetailsBean bean = (EmployeeDetailsBean) session.getAttribute("searchEmployee");
 %>
@@ -22,10 +23,10 @@ EmployeeDetailsBean bean = (EmployeeDetailsBean) session.getAttribute("searchEmp
 			<th>Date of Joining</th>
 			<th>Rate Per Hour</th>
 			<th>Employee Role</th>
-			<th>Modify</th>
+			
 		</tr>
 		<tr>
-		<form action="">
+		
 			<td>
 				<%=bean.getEmpid()%>
 			</td>
@@ -39,7 +40,7 @@ EmployeeDetailsBean bean = (EmployeeDetailsBean) session.getAttribute("searchEmp
 				<%=bean.getEmpcontact()%>
 			</td>
 			<td>
-				<%=bean.getEmpdoj()%>
+				<%=new Date(bean.getEmpdoj().getTime())%>
 			</td>
 			<td>
 				<%=bean.getEmprate()%>
@@ -47,13 +48,15 @@ EmployeeDetailsBean bean = (EmployeeDetailsBean) session.getAttribute("searchEmp
 			<td>
 				<%=bean.getEmprole()%>
 			</td>
-			<td><a href="ModifyEmployee.jsp">Modify</a></td>
-		</form>
+			
+		
 		</tr>
 		
 
 	</table>
-	<a href="index.jsp">Back</a>
+	<br />
+	<br />
+	<a href="EmployeeHomePageAdmin.jsp">Home Page</a>
 	<br />
 	<br />
 </body>
